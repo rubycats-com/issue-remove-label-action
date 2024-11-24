@@ -13,28 +13,22 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     permissions:
-      issues: read
+      issues: write
     steps:
-      - name: Get Labels Action
-        id: issue-labels
-        uses: rubycats-com/get-issue-labels-action
+      - name: Remove Label
+        uses: rubycats-com/issue-remove-label-action
         with:
           number: ${{ github.event.issue.number }}
-      - uses: rubycats-com/jarvis-report-action@main
-        if: contains(fromJSON(issue-labels.output.labels), 'notify')
-        with:
-          report-to: ${{ secrets.JARVIS_TELEGRAM_REPORT_TO }}
-          token: ${{ secrets.JARVIS_TELEGRAM_TOKEN }}
+          label: 'research'
 ```
 
 ## Inputs
 
-| Input      | Required | Description        |
-|------------|----------|--------------------|
-| `number`   | true     | Issue id           |
+| Input    | Required | Description |
+|----------|----------|-------------|
+| `number` | true     | Issue id    |
+| `label`  | true     | Label text  |
 
 ## Outputs
 
-| Output   | Description                                              |
-|----------|----------------------------------------------------------|
-| `labels` | Labels for issue in JSON format, eg ["notify","feature"] |
+No outputs in this action

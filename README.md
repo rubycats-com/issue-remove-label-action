@@ -16,7 +16,7 @@ jobs:
       issues: write
     steps:
       - name: Remove Label
-        uses: rubycats-com/issue-remove-label-action
+        uses: rubycats-com/issue-remove-label-action@main
         with:
           number: ${{ github.event.issue.number }}
           label: 'research'

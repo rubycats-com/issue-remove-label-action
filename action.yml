@@ -1,0 +1,25 @@
+name: 'Get Issue Labels Action'
+description: 'Get issue labels in realtime'
+inputs:
+  number:
+    description: 'Issue number'
+    required: true
+outputs:
+  labels:
+    description: ''
+    value: ${{ steps.get-issue-labels.outputs.labels }}
+runs:
+  using: "composite"
+  steps:
+    - name: Get issue labels
+      id: get-issue-labels
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        GH_REPO: ${{ github.repository }}
+      run: |
+        echo repository: ${{ github.repository }}
+        echo issue: ${{ inputs.number }}
+        labels=$(gh issue view "${{ inputs.number }}" --json labels -q '.labels|map(.name)')
+        echo "labels: $labels"
+        echo "labels=$labels" >> $GITHUB_OUTPUT

@@ -4,15 +4,13 @@ inputs:
   number:
     description: 'Issue number'
     required: true
-outputs:
-  labels:
-    description: ''
-    value: ${{ steps.get-issue-labels.outputs.labels }}
+  label:
+    description: 'Label title'
+    required: true
 runs:
   using: "composite"
   steps:
-    - name: Get issue labels
-      id: get-issue-labels
+    - name: Remove issue labels
       shell: bash
       env:
         GH_TOKEN: ${{ github.token }}
@@ -20,6 +18,5 @@ runs:
       run: |
         echo repository: ${{ github.repository }}
         echo issue: ${{ inputs.number }}
-        labels=$(gh issue view "${{ inputs.number }}" --json labels -q '.labels|map(.name)')
-        echo "labels: $labels"
-        echo "labels=$labels" >> $GITHUB_OUTPUT
+        echo label: ${{ inputs.label }}
+        gh issue edit "${{ inputs.number }}" --remove-label "${{ inputs.label }}"
